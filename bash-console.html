@@ -1,0 +1,67 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`bash-console`
+A bash like console for command execution and history
+
+@demo demo/index.html 
+-->
+
+<dom-module id="bash-console">
+  <template>
+    <style>
+      * {
+		   font-family: "Lucida Console", Monaco, monospace;
+		   font-size: 12px;
+      }
+      :host {
+        display: block;
+      }
+    </style>
+    <div id="console" on-focus="_redirectFocus" style="flex-grow:1;overflow-y:scroll;padding:10px;background:#000;height:[[height]]" tabindex="0">
+    	<div id="bashConsoleCommand" style="display:flex">
+    		<span style="color:#CCC">[[prompt]]</span>&nbsp;
+    		<input id="command" on-keyPress="_handleKeyPress" autocomplete="off" style="background:none;border:0;color:#CCC;flex-grow:1;outline:0;padding:0" />
+    	</div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'bash-console',
+      _handleKeyPress: function(e){
+    	  if (e.charCode == 13) //Enter key
+    	  {
+    		  this.addHistoryEntry(this.prompt + " " + this.$.command.value)
+    		  this.fire('commandExecuted', {value: this.$.command.value});
+    		  console.log("Executed: " + this.$.command.value);
+    		  this.$.command.value = '';
+    	  }
+      },
+      _redirectFocus: function(e){
+    	  this.$.command.focus();
+      },
+      addHistoryEntry: function(text){
+    	  var history = document.createElement('div');
+		  history.style.color="#CCC";
+		  history.textContent = text;
+		  Polymer.dom(this.$.bashConsoleCommand).parentNode.insertBefore(history, this.$.bashConsoleCommand);
+      	  //Scroll down
+		  var scrollHeight = Math.max(this.$.console.scrollHeight, this.$.console.clientHeight);
+		  this.$.console.scrollTop = scrollHeight - this.$.console.clientHeight;
+      },
+      properties: {
+        prompt: {
+          type: String,
+          value: "> ",
+        },
+        height: {
+            type: String,
+            value: "100px",
+          }
+      },
+
+    });
+  </script>
+</dom-module>
