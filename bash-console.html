@@ -34,7 +34,7 @@ A bash like console for command execution and history
     	  if (e.charCode == 13) //Enter key
     	  {
     		  this.addHistoryEntry(this.prompt + " " + this.$.command.value)
-    		  this.fire('commandExecuted', {value: this.$.command.value});
+    		  this.fire('input', {value: this.$.command.value});
     		  console.log("Executed: " + this.$.command.value);
     		  this.$.command.value = '';
     	  }
