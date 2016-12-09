@@ -21,7 +21,7 @@ A bash like console for command execution and history
     <div id="console" on-focus="_redirectFocus" style="flex-grow:1;overflow-y:scroll;padding:10px;background:#000;height:[[height]]" tabindex="0">
     	<div id="bashConsoleCommand" style="display:flex">
     		<span style="color:#CCC">[[prompt]]</span>&nbsp;
-    		<input id="command" on-keyPress="_handleKeyPress" autocomplete="off" style="background:none;border:0;color:#CCC;flex-grow:1;outline:0;padding:0" />
+    		<input id="command" on-keyPress="_handleKeyPress" spellcheck="off" autocomplete="off" style="background:none;border:0;color:#CCC;flex-grow:1;outline:0;padding:0" />
     	</div>
     </div>
   </template>
@@ -31,11 +31,10 @@ A bash like console for command execution and history
 
       is: 'bash-console',
       _handleKeyPress: function(e){
-    	  if (e.charCode == 13) //Enter key
+    	  if (e.keyCode == 13) //Enter key
     	  {
     		  this.addHistoryEntry(this.prompt + " " + this.$.command.value)
     		  this.fire('input', {value: this.$.command.value});
-    		  console.log("Executed: " + this.$.command.value);
     		  this.$.command.value = '';
     	  }
       },
